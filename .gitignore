@@ -1,6 +1,7 @@
 # Project
 .idea
-
+vendor/*
+!vendor/webpack.config.js
 # Node
 node_modules
 
