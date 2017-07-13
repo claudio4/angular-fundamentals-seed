@@ -29,7 +29,7 @@ import {Passenger} from '../../models/Passenger.interface';
     </div>
   `
 })
-export class PassengerDetailComponent implements OnChanges, OnInit{
+export class PassengerDetailComponent implements OnInit{
   @Input()
   detail: Passenger;
 
@@ -41,9 +41,6 @@ export class PassengerDetailComponent implements OnChanges, OnInit{
 
   editing = false;
 
-  ngOnChanges(change) {
-    console.log(change);
-  }
   ngOnInit() {
     this.detail = Object.assign({},  this.detail);
   }

@@ -1,4 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+
+import {PassengerDashboardService} from "../../passenger-dashboard.service";
 
 import {Passenger} from '../../models/Passenger.interface';
 
@@ -20,42 +22,22 @@ import {Passenger} from '../../models/Passenger.interface';
     </div>
   `
 })
-export class PassengerDashboardComponent {
-  passengers: Passenger[] = [{
-    id: 1,
-    fullname: 'Stephen',
-    checkedIn: true,
-    checkInDate: 1490742000000,
-    children: null
-  }, {
-    id: 2,
-    fullname: 'Rose',
-    checkedIn: false,
-    checkInDate: null,
-    children: [{ name: 'Ted', age: 12 },{ name: 'Chloe', age: 7 }]
-  }, {
-    id: 3,
-    fullname: 'James',
-    checkedIn: true,
-    checkInDate: 1491606000000,
-    children: null
-  }, {
-    id: 4,
-    fullname: 'Louise',
-    checkedIn: true,
-    checkInDate: 1488412800000,
-    children: [{ name: 'Jessica', age: 1 }]
-  }, {
-    id: 5,
-    fullname: 'Tina',
-    checkedIn: false,
-    checkInDate: null,
-    children: null
-  }];
+export class PassengerDashboardComponent implements OnInit {
+  passengers: Passenger[];
+  constructor(private passengerService: PassengerDashboardService) {}
+  ngOnInit() {
+    this.passengerService
+      .getPassengers()
+      .subscribe((data: Passenger[]) => this.passengers = data);
+  }
   handleEdit(event: Passenger) {
-    this.passengers = this.passengers.map((p: Passenger) => (p.id === event.id ? Object.assign({}, p, event) : p));
+    this.passengerService.updatePassenger(event).subscribe((data: Passenger) => {
+      this.passengers = this.passengers.map((p: Passenger) => (p.id === event.id ? Object.assign({}, p, event) : p));
+    });
   }
   handleRemove(event:Passenger) {
-    this.passengers = this.passengers.filter((p: Passenger) => (p.id !== event.id))
+    this.passengerService
+      .removePassenger(event)
+      .subscribe((data: Passenger) => {this.passengers = this.passengers.filter((p: Passenger) => (p.id !== event.id))})
   }
 }
