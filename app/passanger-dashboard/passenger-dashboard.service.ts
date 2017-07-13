@@ -4,7 +4,7 @@ import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
-import "rxjs/add/operator/throw";
+import "rxjs/add/observable/throw";
 
 import { Passenger } from './models/Passenger.interface';
 
@@ -16,6 +16,12 @@ export class PassengerDashboardService {
   getPassengers(): Observable<Passenger[]> {
     return this.http
       .get(PASSENGER_API)
+      .map((r: Response) => (r.json()))
+      .catch((err) => Observable.throw(err));
+  }
+  getPassenger(id: number): Observable<Passenger> {
+    return this.http
+      .get(`${PASSENGER_API}/${id}`)
       .map((r: Response) => (r.json()))
       .catch((err) => Observable.throw(err));
   }
